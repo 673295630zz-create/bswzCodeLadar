@@ -3,17 +3,17 @@
 ## Summary
 - Source root: ./examples/spi_demo/src
 - Number of source files: 2
-- Number of functions: 2
-- Number of external functions: 0
-- Number of variables: 3
+- Number of functions: 1
+- Number of external functions: 1
+- Number of variables: 2
 - Number of call relations: 1
-- Number of variable relations: 5
+- Number of variable relations: 4
 
 ## Function Call Relations
 
 | Caller | Callee | Callee Type | Caller File |
 |---|---|---|---|
-| SpiIf_MainFunction | SpiIf_Helper | internal | examples/spi_demo/src/spi_md_if.c |
+| SpiIf_MainFunction | SpiIf_Helper | external | examples/spi_demo/src/spi_md_if.c |
 
 ## Variable Processing Relations
 
@@ -23,22 +23,13 @@
 | SpiIf_MainFunction | g_State | passed_by_address | examples/spi_demo/src/spi_md_if.c | 16 |
 | SpiIf_MainFunction | g_State | reads | examples/spi_demo/src/spi_md_if.c | 13 |
 | SpiIf_MainFunction | g_State | writes | examples/spi_demo/src/spi_md_if.c | 12 |
-| SpiIf_MainFunction | if | reads | examples/spi_demo/src/spi_md_if.c | 13 |
 
 ## Functions
-
-### SpiIf_Helper
-- Defined in: examples/spi_demo/src/spi_md_if.c:6-9
-- Calls: -
-- Reads: -
-- Writes: -
-- Read-Writes: -
-- Passed by Address: -
 
 ### SpiIf_MainFunction
 - Defined in: examples/spi_demo/src/spi_md_if.c:11-18
 - Calls: SpiIf_Helper
-- Reads: g_State, if
+- Reads: g_State
 - Writes: Spi_MD_If.ready_flag, g_State
 - Read-Writes: -
 - Passed by Address: g_State

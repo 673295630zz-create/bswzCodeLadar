@@ -60,3 +60,7 @@ run_analyzer.bat --src .\src --output .\code_relation.drawio --report .\code_rel
 ## Extra Options
 - `--all-variables`: parse all variable-like tokens (useful for deep data-flow inspection).
 - `--variables v1 v2 ...`: only parse specified variables/members.
+
+- `--functions F1 F2 ...`: only analyze specified functions.
+- `--all-functions`: analyze all functions (default behavior).
+- draw.io edges are generated as orthogonal polylines and routed by hierarchy channels to reduce crossing.

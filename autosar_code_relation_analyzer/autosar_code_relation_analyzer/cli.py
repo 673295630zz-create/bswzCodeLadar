@@ -21,6 +21,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument('--exclude', nargs='*', default=[], help='Exclude path keywords, e.g. Generated build output.')
     parser.add_argument('--variables', nargs='*', default=None, help='Variable whitelist.')
     parser.add_argument('--all-variables', action='store_true', help='Analyze all variable-like tokens instead of auto/global filter.')
+    parser.add_argument('--all-functions', action='store_true', default=True, help='Analyze all parsed functions (default true).')
+    parser.add_argument('--functions', nargs='*', default=None, help='Analyze only specific function names.')
     parser.add_argument('--entry', default=None, help='Entry function to highlight in report.')
     return parser
 
@@ -36,6 +38,10 @@ def main() -> None:
     for src in sources:
         processed = preprocess_code(src.content)
         functions.extend(parse_functions(str(src.path), processed))
+
+    if args.functions:
+        wanted = set(args.functions)
+        functions = [fn for fn in functions if fn.name in wanted]
 
     result = analyze_relations(args.src, sources, functions, args.variables, analyze_all_variables=args.all_variables)
     Path(args.output).parent.mkdir(parents=True, exist_ok=True)
