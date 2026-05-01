@@ -11,6 +11,15 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+## Script Entry (Recommended for Large Projects)
+Use the script file to trigger analysis directly:
+```bash
+python run_analyzer.py \
+  --src ./your_project_root \
+  --output ./code_relation.drawio \
+  --report ./code_relation_report.md
+```
+
 ## CLI Example
 ```bash
 python -m autosar_code_relation_analyzer.cli \
@@ -28,6 +37,7 @@ python -m autosar_code_relation_analyzer.cli \
 - Fast architecture/code understanding.
 - AUTOSAR BSW module relationship review.
 - Preliminary impact analysis and design discussion.
+- Large source trees where recursive subfolder scanning is required.
 
 ## Unsuitable Scenarios
 - Compiler-grade semantic correctness.
@@ -35,6 +45,7 @@ python -m autosar_code_relation_analyzer.cli \
 - Full preprocessor and conditional compilation simulation.
 
 ## AUTOSAR BSW Usage Suggestions
-- Use `--include-headers` to capture declarations and inline utilities.
+- By default, the tool recursively scans all subfolders and includes both `.c` and `.h` files.
+- Use `--no-headers` to limit scanning to `.c` for very large repositories.
 - Use `--exclude Generated build output` to skip generated trees.
 - Use `--variables` for focused analysis in large projects.

@@ -13,21 +13,23 @@ from .source_scanner import scan_sources
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description='AUTOSAR code relation analyzer')
-    parser.add_argument('--src', required=True)
-    parser.add_argument('--output', required=True)
-    parser.add_argument('--report', required=True)
-    parser.add_argument('--include-headers', action='store_true')
-    parser.add_argument('--exclude', nargs='*', default=[])
-    parser.add_argument('--variables', nargs='*', default=None)
-    parser.add_argument('--entry', default=None)
+    parser.add_argument('--src', required=True, help='Source directory. Recursively scans subfolders.')
+    parser.add_argument('--output', required=True, help='Output draw.io file path.')
+    parser.add_argument('--report', required=True, help='Output markdown report path.')
+    parser.add_argument('--include-headers', action='store_true', default=True, help='Scan .h files (enabled by default).')
+    parser.add_argument('--no-headers', action='store_true', help='Disable .h scanning and only analyze .c files.')
+    parser.add_argument('--exclude', nargs='*', default=[], help='Exclude path keywords, e.g. Generated build output.')
+    parser.add_argument('--variables', nargs='*', default=None, help='Variable whitelist.')
+    parser.add_argument('--entry', default=None, help='Entry function to highlight in report.')
     return parser
 
 
 def main() -> None:
     args = build_parser().parse_args()
-    sources = scan_sources(args.src, args.include_headers, args.exclude)
+    include_headers = args.include_headers and not args.no_headers
+    sources = scan_sources(args.src, include_headers=include_headers, exclude_keywords=args.exclude)
     if not sources:
-        raise SystemExit('No source files found. Check --src and --include-headers.')
+        raise SystemExit('No source files found. Check --src / exclude filters / header switch.')
 
     functions = []
     for src in sources:
@@ -39,6 +41,8 @@ def main() -> None:
     Path(args.report).parent.mkdir(parents=True, exist_ok=True)
     write_drawio(result, args.output)
     write_markdown_report(result, args.report, args.entry)
+    print(f'Analyzed files: {len(sources)}')
+    print(f'Functions: {len(result.functions)} | Calls: {len(result.call_relations)} | Variable relations: {len(result.variable_relations)}')
     print(f'Generated: {args.output}')
     print(f'Generated: {args.report}')
 
